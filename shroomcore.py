@@ -8,7 +8,6 @@ from urllib.parse import quote
 URL = "https://toxicshrooms.vercel.app/api/mushrooms"
 root = Tk()
 root.title("shroomcore")
-root.geometry("500x550")
 
 
 def fetch_urls(url):  # funcion que hace fetch del api
@@ -19,8 +18,10 @@ def fetch_urls(url):  # funcion que hace fetch del api
         fetched_lista = response.json()
         print(f"cargada lista con {len(fetched_lista)} valores")
         filtered_lista = [item for item in fetched_lista if (item.get("img"))]
-        filtered_lista = [item for item in filtered_lista if (item.get("commonname"))]
-        filtered_lista = [item for item in filtered_lista if (item.get("agent"))]
+        filtered_lista = [
+            item for item in filtered_lista if (item.get("commonname"))]
+        filtered_lista = [
+            item for item in filtered_lista if (item.get("agent"))]
         print(f"clean up con {len(filtered_lista)} valores")
         return filtered_lista
     else:
@@ -40,6 +41,15 @@ def change_index(change):  # funcion de los botones
     update()
 
 
+def change_type(change):
+    # global set_type
+    # global index
+    # set_type = change
+    # index = 0
+    # change_index(1)
+    pass
+
+
 def cargar_imagen():
     global index
     img_url = shrooms[index]["img"]
@@ -50,7 +60,7 @@ def cargar_imagen():
         print(img_response)
         img_cargar = Image.open(io.BytesIO(img_response.content))
         img_filtros = img_cargar.resize((200, 200), Image.NEAREST).convert(
-            'P', palette=Image.ADAPTIVE, colors=16).resize((400, 400), Image.NEAREST)
+            'P', palette=Image.ADAPTIVE, colors=16).resize((425, 425), Image.NEAREST)
         img_done = ImageTk.PhotoImage(img_filtros)
         display.config(image=img_done)
         display.image = img_done
@@ -65,7 +75,7 @@ def update():  # actualizar info
     # print(shrooms[index])
     nombre.config(text=shrooms[index]["commonname"])
     descripcion.config(
-        text=f'{shrooms[index]["name"]} \n {shrooms[index]["agent"]} \n {shrooms[index]["type"]}')
+        text=f'{shrooms[index]["name"]} \n [{shrooms[index]["agent"]}] \n {shrooms[index]["type"]}')
     cargar_imagen()
 
 
@@ -74,19 +84,40 @@ shrooms = fetch_urls(URL)
 index = 0
 
 # cargar el gui
-nombre = Label(root, font=("Arial 15 bold"), text=None)
-nombre.grid(column=1, row=0)
-descripcion = Label(
-    root, text=None)
-descripcion.grid(column=1, row=1)
 
 display = Label(root, image=None)
-display.grid(column=1, row=2)
+display.pack()
 
-b_prev = Button(root, text="<<", command=lambda: change_index(-1)
-                ).grid(column=0, row=3)
-b_next = Button(root, text=">>", command=lambda: change_index(1)
-                ).grid(column=2, row=3)
+textos_frame = Frame(root, borderwidth=1, relief="sunken")
+textos_frame.pack(ipady=10, expand="true", fill="both")
+
+nombre = Label(textos_frame, font=("Arial 15 bold"), text=None)
+nombre.pack(side="top")
+
+descripcion = Label(
+    textos_frame, text=None)
+descripcion.pack(expand="true", fill="both", side="top")
+
+botonera_tipo = Frame(root)
+botonera_tipo.pack(side="left")
+
+b_all = Button(botonera_tipo, text="a", padx=20, pady=20,
+               command=lambda: change_type("all")).pack(side="left")
+b_poison = Button(botonera_tipo, text="p", padx=20, pady=20,
+                  command=lambda: change_type("poison")).pack(side="left")
+b_death = Button(botonera_tipo, text="d", padx=20, pady=20,
+                 command=lambda: change_type("death")).pack(side="left")
+
+botonera_change = Frame(root)
+botonera_change.pack(side="right")
+
+
+b_prev = Button(botonera_change, text="<<", padx=20, pady=20, command=lambda: change_index(-1)
+                ).pack(side="left")
+# .grid(column=3, row=2)
+b_next = Button(botonera_change, text=">>", padx=20, pady=20, command=lambda: change_index(1)
+                ).pack(side="left")
+# .grid(column=4, row=2)
 
 update()
 root.mainloop()
