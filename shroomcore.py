@@ -6,6 +6,9 @@ import io
 import os
 from urllib.parse import quote
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
 URL = "https://toxicshrooms.vercel.app/api/mushrooms"
 root = Tk()
 root.title("shroomcore")
@@ -113,24 +116,21 @@ descripcion.pack(expand="true", fill="both", side="top")
 botonera_tipo = Frame(root)
 botonera_tipo.pack(side="left")
 
-img_poison = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "shroomcore/icons/shroom.png"))
-                             .resize((50,50),Image.ANTIALIAS))
+img_poison = ImageTk.PhotoImage(Image.open('icons/shroom.png').resize((50,50),Image.ANTIALIAS))
 b_all = Button(botonera_tipo, text="a", image=img_poison, padx=20, pady=20,
                command=lambda: change_type("poisonous")).pack(side="left")
-img_death = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "shroomcore/icons/deadly.png")).resize((50,50),Image.ANTIALIAS))
+img_death = ImageTk.PhotoImage(Image.open('icons/deadly.png').resize((50,50),Image.ANTIALIAS))
 b_death = Button(botonera_tipo, text="d", image=img_death, padx=20, pady=20,
                  command=lambda: change_type("deadly")).pack(side="left")
 
 botonera_change = Frame(root)
 botonera_change.pack(side="right")
 
-img_prev = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "shroomcore/icons/left.png"))
-                             .resize((50,50),Image.ANTIALIAS))
+img_prev = ImageTk.PhotoImage(Image.open('icons/left.png').resize((50,50),Image.ANTIALIAS))
 b_prev = Button(botonera_change, text="<<", image=img_prev, padx=20, pady=20, command=lambda: change_index(-1)
                 ).pack(side="left")
 
-img_next = ImageTk.PhotoImage(Image.open(os.path.join(os.getcwd(), "shroomcore/icons/right.png"))
-                             .resize((50,50),Image.ANTIALIAS))
+img_next = ImageTk.PhotoImage(Image.open('icons/right.png').resize((50,50),Image.ANTIALIAS))
 b_next = Button(botonera_change, text=">>", image=img_next, padx=20, pady=20, command=lambda: change_index(1)
                 ).pack(side="left")
 
